@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IssueDesk - 個人專案與 Issue 管理工具</title>
+    <meta name="description" content="純 HTML、CSS、JS 打造的個人 GitHub Issue 風格離線專案管理工具。支援上傳與匯出 XLSX，具備多專案切換、標籤層級、進度回報與歷程追蹤功能。" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <!-- App Header -->
+    <header class="app-header">
+      <div class="header-container">
+        <!-- Logo -->
+        <div class="logo-area">
+          <div class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path>
+              <circle cx="12" cy="13" r="2"></circle>
+            </svg>
+          </div>
+          <div>
+            <div class="logo-title">
+              <h1>IssueDesk</h1>
+              <span class="badge-tag">純前端離線版</span>
+            </div>
+            <div class="logo-subtitle">GitHub Issue 風格 • XLSX 雙向同步 • 純 HTML/CSS/JS</div>
+          </div>
+        </div>
+
+        <!-- Header Actions -->
+        <div class="header-actions">
+          <input type="file" id="quickFileInput" accept=".xlsx, .xls" style="display: none;" />
+          
+          <button type="button" class="btn btn-dark" id="btnOpenUploadModal">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <span>上傳 XLSX</span>
+          </button>
+
+          <button type="button" class="btn btn-primary" id="btnExportXlsx">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>匯出 XLSX</span>
+          </button>
+
+          <button type="button" class="btn-icon-only" id="btnDownloadSample" title="下載範例 Excel 活頁簿格式" style="color: #8b949e;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          </button>
+
+          <button type="button" class="btn-icon-only" id="btnResetData" title="重設為預設範例資料" style="color: #8b949e;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+          </button>
+
+          <button type="button" class="btn btn-blue" id="btnOpenNewIssue">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>新增 Issue</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Subnav: Project Tabs -->
+      <div class="sub-nav">
+        <div class="sub-nav-container">
+          <div class="project-tabs-list" id="projectTabsContainer">
+            <!-- Rendered dynamically -->
+          </div>
+          <button type="button" class="btn-new-project-pill" id="btnOpenNewProject">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>新增專案</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Project Banner -->
+      <section class="project-banner" id="projectBanner">
+        <!-- Rendered dynamically -->
+      </section>
+
+      <!-- GitHub Issues Box -->
+      <section class="issues-card">
+        <!-- Search & Filter Toolbar -->
+        <div class="filter-toolbar">
+          <div class="search-box-wrapper">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="搜尋 Issue 標題、說明、#編號或標籤..." />
+          </div>
+
+          <div class="filter-dropdowns">
+            <select id="priorityFilter" class="select-filter">
+              <option value="all">所有優先層級</option>
+              <option value="p0">P0 - 緊急 (Urgent)</option>
+              <option value="p1">P1 - 高 (High)</option>
+              <option value="p2">P2 - 中 (Medium)</option>
+              <option value="p3">P3 - 低 (Low)</option>
+            </select>
+
+            <select id="tagFilter" class="select-filter">
+              <option value="all">所有標籤</option>
+              <!-- Populated dynamically -->
+            </select>
+
+            <select id="sortFilter" class="select-filter">
+              <option value="newest">建立時間 (新到舊)</option>
+              <option value="oldest">建立時間 (舊到新)</option>
+              <option value="progress-desc">完成進度高至低</option>
+              <option value="progress-asc">完成進度低至高</option>
+              <option value="priority">優先等級 (P0優先)</option>
+            </select>
+
+            <button type="button" class="btn btn-primary" id="btnQuickNewIssue">
+              + 新增 Issue
+            </button>
+          </div>
+        </div>
+
+        <!-- Issue State Tabs: Open / Closed -->
+        <div class="issues-header">
+          <div class="state-tabs">
+            <button type="button" class="state-tab-btn active" id="tabOpenIssues">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-open">
+                <circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <span id="openCountText">0 待處理 (Open)</span>
+            </button>
+
+            <button type="button" class="state-tab-btn" id="tabClosedIssues">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-closed">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span id="closedCountText">0 已結案 (Closed)</span>
+            </button>
+          </div>
+
+          <div style="font-size: 12px; color: #656d76;" id="showingCountText">
+            共 0 筆
+          </div>
+        </div>
+
+        <!-- Issue List Items -->
+        <ul class="issue-list" id="issueListContainer">
+          <!-- Rendered dynamically -->
+        </ul>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-container">
+        <div>
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #238636; margin-right: 6px;"></span>
+          <span>純 HTML/CSS/JavaScript 運作 • 無伺服器 • 離線隨身使用</span>
+        </div>
+        <div>
+          <span>隨時點擊「匯出 XLSX」將專案與進度歷程備份至 Excel 檔</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Modal: Issue Detail & Progress Updates -->
+    <div class="modal-backdrop" id="modalIssueDetail" style="display: none;">
+      <div class="modal-container modal-lg">
+        <div class="issue-detail-header" id="detailHeader">
+          <!-- Rendered dynamically -->
+        </div>
+        <div class="modal-body" style="padding: 0;">
+          <div class="detail-layout">
+            <!-- Left: Description & Progress Timeline -->
+            <div class="detail-main" id="detailMainContent">
+              <!-- Rendered dynamically -->
+            </div>
+            <!-- Right: Sidebar Metadata -->
+            <div class="detail-sidebar" id="detailSidebarContent">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: New Issue -->
+    <div class="modal-backdrop" id="modalNewIssue" style="display: none;">
+      <div class="modal-container">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <h3 class="modal-title">新增 Issue</h3>
+          </div>
+          <button type="button" class="btn-close" id="btnCloseNewIssueModal">&times;</button>
+        </div>
+        <form id="formNewIssue">
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="form-label">所屬專案 (Project) *</label>
+              <select id="newIssueProject" class="form-select" required></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Issue 標題 (Title) *</label>
+              <input type="text" id="newIssueTitle" class="form-input" placeholder="例如：修正結帳金額計算錯誤、實作深色主題..." required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">詳細說明 (Description)</label>
+              <textarea id="newIssueDesc" class="form-textarea" rows="4" placeholder="詳細描述任務背景、驗收標準或重現步驟..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">優先等級 (Priority)</label>
+              <div class="priority-selector" id="newIssuePrioritySelector">
+                <button type="button" class="priority-radio-btn" data-priority="p0">P0 - 緊急</button>
+                <button type="button" class="priority-radio-btn" data-priority="p1">P1 - 高</button>
+                <button type="button" class="priority-radio-btn selected" data-priority="p2">P2 - 中</button>
+                <button type="button" class="priority-radio-btn" data-priority="p3">P3 - 低</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">標籤 / 關鍵字 (逗號或 Enter 分隔)</label>
+              <input type="text" id="newIssueTagsInput" class="form-input" placeholder="例如：bug, checkout, urgent" />
+              <div style="font-size: 11px; color: #656d76; margin-top: 4px;">常用標籤：bug, feature, enhancement, docs, ui/ux, performance</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">初始進度 (%)</label>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <input type="range" id="newIssueProgressRange" min="0" max="100" step="5" value="0" style="flex: 1;" />
+                <span id="newIssueProgressLabel" style="font-weight: 700; width: 40px; text-align: right;">0%</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn" id="btnCancelNewIssue">取消</button>
+            <button type="submit" class="btn btn-primary">建立 Issue</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: New / Edit Project -->
+    <div class="modal-backdrop" id="modalProject" style="display: none;">
+      <div class="modal-container" style="max-width: 480px;">
+        <div class="modal-header">
+          <h3 class="modal-title" id="projectModalTitle">新增專案</h3>
+          <button type="button" class="btn-close" id="btnCloseProjectModal">&times;</button>
+        </div>
+        <form id="formProject">
+          <div class="modal-body">
+            <input type="hidden" id="editProjectId" value="" />
+            <div class="form-group">
+              <label class="form-label">專案名稱 *</label>
+              <input type="text" id="projectNameInput" class="form-input" placeholder="例如：官網改版、行動 App、API 優化..." required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">專案目標或範疇說明</label>
+              <textarea id="projectDescInput" class="form-textarea" rows="3" placeholder="簡短說明專案的主要目標..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">標記顏色</label>
+              <div id="projectColorPicker" style="display: flex; gap: 8px;">
+                <!-- Color dots -->
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn" id="btnCancelProject">取消</button>
+            <button type="submit" class="btn btn-blue" id="btnSaveProject">儲存專案</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Upload XLSX -->
+    <div class="modal-backdrop" id="modalUpload" style="display: none;">
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3 class="modal-title">上傳 XLSX 活頁簿檔案</h3>
+          <button type="button" class="btn-close" id="btnCloseUploadModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="drop-zone" id="modalDropZone">
+            <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="12" y1="18" x2="12" y2="12"></line>
+              <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+            <h4 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">拖曳 .xlsx 檔案至此處，或點擊選擇</h4>
+            <p style="font-size: 12px; color: #656d76; margin-bottom: 12px;">系統將自動解析工作表為不同專案與任務列表</p>
+            <button type="button" class="btn btn-primary" id="btnSelectFileTrigger">瀏覽電腦中的檔案</button>
+            <input type="file" id="modalFileInput" accept=".xlsx, .xls" style="display: none;" />
+          </div>
+
+          <div id="uploadPreviewSection" style="display: none; margin-top: 16px;">
+            <!-- Populated after file read -->
+          </div>
+
+          <div style="margin-top: 16px; padding: 12px; background: #f6f8fa; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: 12px; color: #656d76;">
+            <strong>格式支援：</strong>
+            <ul style="margin-left: 18px; margin-top: 4px;">
+              <li>多工作表結構：每個工作表名稱自動成為獨立 Project 頁面。</li>
+              <li>工作表內每列為一個 Issue，支援「標題」、「狀態」、「優先級」、「進度」、「說明」等欄位。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" style="display: none;"></div>
+
+    <!-- Pure JS Application Script -->
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
