@@ -1274,3 +1274,122 @@ a:hover {
   flex-wrap: wrap;
   gap: 10px;
 }
+
+/* ==========================================================================
+   Designated XLSX Source Bar & Empty Workspace Notice
+   ========================================================================== */
+
+.source-notice-bar {
+  background-color: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  box-shadow: var(--shadow-sm);
+}
+
+.source-notice-bar.source-auto {
+  background-color: #dafbe1;
+  border-color: #aceebb;
+  color: #1a7f37;
+}
+
+.source-notice-bar.source-missing {
+  background-color: #fff8c5;
+  border-color: #d4a72c;
+  color: #6e4e00;
+}
+
+.source-notice-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.source-notice-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.code-path {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  background: rgba(27, 31, 36, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.onboarding-card {
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+}
+
+.onboarding-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background-color: #fff8c5;
+  border: 1px solid #d4a72c;
+  color: #9a6700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.onboarding-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.onboarding-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin: 0 auto 22px;
+  line-height: 1.65;
+}
+
+.onboarding-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.detail-edit-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.detail-edit-btn:hover {
+  background: #e1e4e8;
+  color: var(--text-primary);
+}
+

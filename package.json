@@ -1,19 +1,12 @@
 {
   "name": "issuedesk",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
   "scripts": {
-    "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "vite build",
-    "preview": "vite preview",
-    "clean": "rm -rf dist server.js",
-    "lint": "node -c app.js xlsx-engine.js"
+    "dev": "python3 -c \"import http.server, socketserver; h=http.server.SimpleHTTPRequestHandler; h.extensions_map.update({'.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8','.xlsx':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}); socketserver.TCPServer.allow_reuse_address=True; socketserver.TCPServer(('0.0.0.0',3000),h).serve_forever()\"",
+    "build": "rm -rf dist && mkdir -p dist && cp index.html style.css app.js xlsx-engine.js dist/ && ([ -d data ] && cp -r data dist/ || true)",
+    "lint": "node -c xlsx-engine.js && node -c app.js"
   },
-  "dependencies": {
-    "vite": "^8.3.0"
-  },
-  "devDependencies": {
-    "esbuild": "^0.25.0"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }

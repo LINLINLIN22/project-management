@@ -1,6 +1,6 @@
 {
   "name": "IssueDesk - 個人專案與 Issue 管理工具",
-  "description": "專為個人設計的 GitHub Issue 風格離線專案管理工具。支援上傳與即時匯出 XLSX 檔案，自動生成不同專案頁面、建立與管理 Issue、設定標籤與優先層級、更新進度歷程與關閉 Issue，無需後端伺服器。",
+  "description": "純 HTML、CSS、JavaScript 打造的個人 GitHub Issue 風格離線專案管理工具。支援自動解析指定路徑 (./data/issues.xlsx) 或上傳 XLSX 檔案生成不同專案頁面、建立與管理 Issue、設定標籤與優先層級、更新進度歷程與關閉 Issue，並可匯出 XLSX。",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": []
 }
